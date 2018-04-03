@@ -11,6 +11,6 @@ Class Stuff
 #include <stdio.h>
 int main()
 {
-printf("Hello World \n");
+printf("Hello, my name is Jose Sandoval \n");
 return 0;
 }
