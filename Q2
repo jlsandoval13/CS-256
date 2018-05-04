@@ -1,105 +1,130 @@
 JLS
+#include <string>
 #include <iostream>
 using namespace std;
 
-class DayOfYear
-{
-private:
-	int D;
+class DayOfYear {
 public:
-	void setDay(int);
-	int getDay();
-	static string January();
-	static string February();
-	static string March();
-	static string April();
-	static string May();
-	static string June();
-	static string July();
-	static string August();
-	static string September();
-	static string October();
-	static string November();
-	static string December();
+	DayOfYear(int day);
+	DayOfYear(string month, int day);
+	void setDay(int day);
+	void getDay();
+	void getMonth();
+	void getDPM();
 	void print();
+	DayOfYear operator++();
+	DayOfYear operator--();
+private:
+	int Day;
+	string Month;
+	int daysInMonth(int month);
+	int FindDate();
+	static const string months[];
+	static const int days[];
 };
 
-static string January()
-{
-	if (getDay() >= 0 && getDay() <= 31)
-		string x = getDay();
-	cout << "Day " + x + " would be January " + x + "." << endl;
-}
-static string February()
-{
+const string DayOfYear::months[12] = { "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER" };
 
-}
-static string March()
-{
+const int DayOfYear::days[12] = { 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 };
 
-}
-static string April()
-{
-
-}
-static string May()
-{
-
-}
-static string June()
-{
-
-}
-static string July()
-{
-
-}
-static string August()
-{
-
-}
-static string September()
-{
-
-}
-static string October()
-{
-
-}
-static string Novemeber()
-{
-
-}
-static string December()
-{
-
+DayOfYear::DayOfYear(int day) {
+	Day = day;
 }
 
-void DayOfYear::setDay(int D)
-{
-
+DayOfYear::DayOfYear(string month = "", int day = 0) {
+	Month = month;
+	Day = day;
 }
 
-int DayOfYear::getDay()
-{
-	int Day = D;
-	return Day;
+DayOfYear DayOfYear::operator++() {
+	Day++;
+	if (Day == 366)
+		Day = 1;
+	return *this;
 }
 
-void DayOfYear::print()
-{
-
+DayOfYear DayOfYear::operator--() {
+	Day--;
+	if (Day == 0)
+		Day = 365;
+	return *this;
 }
 
-int main()
-{
-	DayOfYear D;
-	int d;
+void DayOfYear::setDay(int day) {
+	Day = day;
+}
 
-	cout << "Enter a number: " << endl;
-	cin >> d;
+int DayOfYear::daysInMonth(int month) {
+	if ((month % 2 != 0 && month <= 7) || (month % 2 == 0 && month > 7))
+		return 31;
+	else if (month != 2)
+		return 30;
+	else if (month == 2)
+		return 28;
+	return -1;
+}
 
-	D.setDay(d);
+int DayOfYear::FindDate() {
+	int M = 0;
+	int FD = Day;
+	while (days[M] < Day && M<12) {
+		FD -= daysInMonth(++M);
+	}
+	Month = months[M];
+	return FD;
+}
 
+void DayOfYear::getDay() {
+	int d = 0;
+	do {
+		cout << "Enter a day between 1-365: ";
+		cin >> d;
+		if (d < 1 || d > 365)
+			cout << "Invalid date. Try again after quitting." << endl;
+	} while (d > 0 || d < 366);
+	Day = d;
+}
 
+void DayOfYear::getDPM() {
+	int M = 0;
+	while (days[M] < Day && M < 12) { ++M; }
+	int d = 0;
+	int upper = days[M];
+	int lower = days[M] - daysInMonth(M);
+	do {
+		cout << "Enter a day for the month of " << Month << ": ";
+		cin >> d;
+		if (d < lower || d>upper)
+			cout << "Invalid date. Try again after quitting." << endl;
+	} while (d < lower || d>upper);
+	Day = d;
+}
+
+void DayOfYear::getMonth() {
+	int M;
+	do {
+		cout << "Enter month as a value between 1-12: ";
+		cin >> M;
+		if (M < 1 || M > 12)
+			cout << "Invalid month" << endl;
+	} while (M < 1 || M > 12);
+	Month = months[M - 1];
+}
+
+void DayOfYear::print() {
+		int day = FindDate();
+		cout << "Day " << Day << " is " << Month << " " << day << endl;
+}
+
+int main() {
+	cout << "Question 2: " << endl;
+	DayOfYear day(0);
+	day.getDay();
+	day.print();
+	cout << "\nQuestion 3: " << endl;
+	DayOfYear daymo("", 0);
+	daymo.getMonth();
+	daymo.getDPM();
+	daymo.print();
+	return 0;
 }
