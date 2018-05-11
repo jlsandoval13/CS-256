@@ -1,0 +1,8 @@
+#include <iostream>
+#include "CustomerData.h"
+using namespace std;
+
+int main()
+{
+	return 0;
+}
